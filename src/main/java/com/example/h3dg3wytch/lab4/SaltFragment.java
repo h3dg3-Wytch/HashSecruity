@@ -85,7 +85,9 @@ public class SaltFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getActivity(), PasswordStorage.MD5(mUser.getPassword()), Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getActivity(), UserInfoActivity.class);
+                i.putExtra(UserInfoFragment.ARGS_USER_INFO, new User());
+                startActivity(i);
 
             }
         });
@@ -108,8 +110,8 @@ public class SaltFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_USER) {
-                User user = (User) data.getSerializableExtra(UserInfoFragment.ARG_USER);
-                Toast.makeText(getActivity(), user.toString(), Toast.LENGTH_SHORT).show();
+                User user = (User) data.getSerializableExtra(NewUserFragment.ARG_USER);
+                Toast.makeText(getActivity(), user.getUserName(), Toast.LENGTH_SHORT).show();
             }
         }else{
             Toast.makeText(getActivity(), "BAD REACTION", Toast.LENGTH_SHORT).show();

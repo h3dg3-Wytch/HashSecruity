@@ -10,49 +10,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by h3dg3wytch on 4/7/16.
  */
 public class UserInfoFragment extends Fragment {
 
-    public static final String ARG_USER = "user";
-
-    private EditText mUserEditText;
-    private EditText mPasswordEditText;
-
-    private Button mSubmitButton;
+    public static final String ARGS_USER_INFO = "com.example.h3dg3wytch.lab4.user";
 
     private User mUser;
 
-    @Nullable
+    public static UserInfoFragment newInstance(User user){
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARGS_USER_INFO, user);
+        UserInfoFragment fragment = new UserInfoFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       View view = inflater.inflate(R.layout.fragment_new_user, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        mSubmitButton = (Button) view.findViewById(R.id.newUserSubmitButton);
-        mSubmitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                setResult();
-                getActivity().finish();
-
-            }
-        });
-
-        return view;
-
+        mUser = (User) getArguments().getSerializable(ARGS_USER_INFO);
+        Toast.makeText(getActivity(), mUser.toString(), Toast.LENGTH_SHORT).show();
 
     }
-
-    private void setResult(){
-
-        Intent i = new Intent();
-        i.putExtra(ARG_USER, new User());
-        getActivity().setResult(Activity.RESULT_OK, i);
-
-    }
-
-
 }

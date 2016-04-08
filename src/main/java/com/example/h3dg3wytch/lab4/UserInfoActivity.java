@@ -11,6 +11,8 @@ public class UserInfoActivity extends SingleFragmentActivity {
     public Fragment getFragment() {
 
 
-        return new UserInfoFragment();
+        User user = (User) getIntent().getSerializableExtra(UserInfoFragment.ARGS_USER_INFO);
+
+        return UserInfoFragment.newInstance(user);
     }
 }

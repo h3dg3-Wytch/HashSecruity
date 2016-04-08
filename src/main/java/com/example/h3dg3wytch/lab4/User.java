@@ -26,6 +26,10 @@ public class User implements Serializable {
         return id;
     }
 
+    public void createHash(){
+
+    }
+
 
     public String getUserName() {
         return userName;
