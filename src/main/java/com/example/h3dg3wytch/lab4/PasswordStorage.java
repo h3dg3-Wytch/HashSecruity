@@ -2,6 +2,7 @@ package com.example.h3dg3wytch.lab4;
 
 import android.util.Base64;
 
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 
 import javax.crypto.SecretKey;
@@ -12,17 +13,31 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
 public class PasswordStorage {
-    public static byte[] hashPassword( final char[] password, final byte[] salt, final int iterations, final int keyLength ) {
 
+    public static String MD5(String password){
+
+        String generatedPassword = null;
         try {
-            SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
-            PBEKeySpec spec = new PBEKeySpec( password, salt, iterations, keyLength );
-            SecretKey key = skf.generateSecret( spec );
-            byte[] res = key.getEncoded( );
-            return res;
-
-        } catch( NoSuchAlgorithmException | InvalidKeySpecException e ) {
-            throw new RuntimeException( e );
+            // Create MessageDigest instance for MD5
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            //Add password bytes to digest
+            md.update(password.getBytes());
+            //Get the hash's bytes
+            byte[] bytes = md.digest();
+            //This bytes[] has bytes in decimal format;
+            //Convert it to hexadecimal format
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i< bytes.length ;i++)
+            {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            //Get complete hashed password in hex format
+            generatedPassword = sb.toString();
         }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        return generatedPassword;
     }
 }

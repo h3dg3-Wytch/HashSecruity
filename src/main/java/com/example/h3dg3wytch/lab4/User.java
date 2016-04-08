@@ -1,16 +1,31 @@
 package com.example.h3dg3wytch.lab4;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
+import java.util.UUID;
 
 /**
  * Created by h3dg3wytch on 4/1/16.
  */
-public class User {
+public class User implements Serializable {
 
     private String userName;
     private String password;
 
     private byte[] salt;
+
+    private String hash;
+
+    private UUID id;
+
+    public User(){
+        this.id = UUID.randomUUID();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
 
     public String getUserName() {
         return userName;
@@ -35,4 +50,14 @@ public class User {
     public void setSalt(byte[] salt) {
         this.salt = salt;
     }
+
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
 }

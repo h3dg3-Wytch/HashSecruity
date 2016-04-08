@@ -1,5 +1,7 @@
 package com.example.h3dg3wytch.lab4;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,15 +14,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 /**
  * Created by h3dg3wytch on 4/1/16.
  */
 public class SaltFragment extends Fragment {
+
+    private static final int REQUEST_USER = 0;
+
+    private static ArrayList<User> mUsers;
     //Input fields
     private EditText mUserEditText;
     private EditText mPasswordEditText;
 
     private Button mSubmitButton;
+    private Button mNewUserButton;
 
     private User mUser;
 
@@ -29,7 +38,9 @@ public class SaltFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_salt, container, false);
 
-        mUser = new User();
+        if(mUsers == null){
+            mUsers = new ArrayList<>();
+        }
 
         mUserEditText = (EditText) view.findViewById(R.id.saltUserEditText);
         mUserEditText.addTextChangedListener(new TextWatcher() {
@@ -74,11 +85,34 @@ public class SaltFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getActivity(), mUser.getUserName() + " " + mUser.getPassword(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), PasswordStorage.MD5(mUser.getPassword()), Toast.LENGTH_SHORT).show();
 
             }
         });
 
+        mNewUserButton = (Button) view.findViewById(R.id.saltNewUserButton);
+        mNewUserButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), NewUserActivity.class);
+
+                startActivityForResult(i,REQUEST_USER );
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_USER) {
+                User user = (User) data.getSerializableExtra(UserInfoFragment.ARG_USER);
+                Toast.makeText(getActivity(), user.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(getActivity(), "BAD REACTION", Toast.LENGTH_SHORT).show();
+        }
     }
 }
