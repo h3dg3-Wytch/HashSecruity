@@ -10,7 +10,6 @@ public class UserInfoActivity extends SingleFragmentActivity {
     @Override
     public Fragment getFragment() {
 
-
         User user = (User) getIntent().getSerializableExtra(UserInfoFragment.ARGS_USER_INFO);
 
         return UserInfoFragment.newInstance(user);

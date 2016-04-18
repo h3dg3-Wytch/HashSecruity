@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Created by h3dg3wytch on 4/7/16.
  */
@@ -28,12 +30,14 @@ public class NewUserFragment extends Fragment {
 
     private User mUser;
 
+    //String to hold the password, only exisits here
+    private String mPassword;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //This is a new user, so create a new user object
         mUser = new User();
-
 
     }
 
@@ -76,7 +80,7 @@ public class NewUserFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                mUser.setPassword(s.toString());
+                mPassword = s.toString();
 
             }
 
@@ -91,10 +95,15 @@ public class NewUserFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if(mUser.getPassword() != null && mUser.getUserName() != null && !mUser.getPassword().equals("") &&  !mUser.getUserName().equals("")) {
+                if(mPassword != null && mUser.getUserName() != null && !mPassword.equals("") &&  !mUser.getUserName().equals("")) {
+                    //Set the hash with generating the hash and the salt.
+                    mUser.setHash(PasswordStorage.getSecurePassword(mPassword, mUser.getSalt()));
+                    //Send a good result
                     setResult();
+                    //Finish
                     getActivity().finish();
                 }else{
+                    // We tell them they messed up this way
                     Toast.makeText(getActivity(), "Please enter a valid username and password!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -106,8 +115,9 @@ public class NewUserFragment extends Fragment {
 
     }
 
+    //Sets a good result
     private void setResult(){
-
+        //We get the activity and sent the result to it
         Intent i = new Intent();
         i.putExtra(ARG_USER, mUser);
         getActivity().setResult(Activity.RESULT_OK, i);
