@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lab4</string>
+
+    <string name="sumbit">Submit</string>
+    <string name="new_user">New User?</string>
+
+</resources>
